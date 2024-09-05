@@ -1,0 +1,30 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  APP_NAME: grep-xlsx
+
+tasks:
+  default:
+    cmds:
+      - task: run
+  build:
+    dir: cmd/{{.APP_NAME}}
+    cmds:
+      - go build -o {{.APP_NAME}}{{exeExt}} .
+    sources:
+      - ./*.go
+    generates:
+      - ./{{.APP_NAME}}{{exeExt}}
+  run:
+    dir: cmd/{{.APP_NAME}}
+    deps: [ build ]
+    cmds:
+      - ./{{.APP_NAME}}{{exeExt}} -help
+  install:
+    cmds:
+      - go install github.com/devlights/{{.APP_NAME}}/cmd/{{.APP_NAME}}
+  clean:
+    cmds:
+      - cmd /c "rd /s /q .task"
